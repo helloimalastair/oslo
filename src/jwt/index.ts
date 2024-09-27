@@ -20,7 +20,7 @@ export type JWTAlgorithm =
 
 export async function createJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBuffer | TypedArray,
+	key: ArrayBuffer | TypedArray | CryptoKey,
 	payloadClaims: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;

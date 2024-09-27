@@ -26,13 +26,13 @@ export function generateRandomInteger(max: number): number {
 	// This zeroes bits that can be ignored to increase the chance `result` < `max`.
 	// For example, if `max` can be represented with 10 bits, the leading 6 bits of the random 16 bits (2 bytes) can be ignored.
 	if (shift !== 0) {
-		bytes[0] &= (1 << shift) - 1;
+		bytes[0]! &= (1 << shift) - 1;
 	}
 	let result = bytesToInteger(bytes);
 	while (result >= max) {
 		crypto.getRandomValues(bytes);
 		if (shift !== 0) {
-			bytes[0] &= (1 << shift) - 1;
+			bytes[0]! &= (1 << shift) - 1;
 		}
 		result = bytesToInteger(bytes);
 	}

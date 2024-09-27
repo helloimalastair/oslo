@@ -27,10 +27,10 @@ export class RSASSAPKCS1v1_5 {
 	}
 
 	public async sign(
-		privateKey: ArrayBuffer | TypedArray,
+		privateKey: ArrayBuffer | TypedArray | CryptoKey,
 		data: ArrayBuffer | TypedArray
 	): Promise<ArrayBuffer> {
-		const cryptoKey = await crypto.subtle.importKey(
+		const cryptoKey = privateKey instanceof ArrayBuffer || ArrayBuffer.isView(privateKey) ? await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
 			{
@@ -39,7 +39,7 @@ export class RSASSAPKCS1v1_5 {
 			},
 			false,
 			["sign"]
-		);
+		) : privateKey;
 		const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", cryptoKey, data);
 		return signature;
 	}
@@ -107,10 +107,10 @@ export class RSASSAPSS {
 	}
 
 	public async sign(
-		privateKey: ArrayBuffer | TypedArray,
+		privateKey: ArrayBuffer | TypedArray | CryptoKey,
 		data: ArrayBuffer | TypedArray
 	): Promise<ArrayBuffer> {
-		const cryptoKey = await crypto.subtle.importKey(
+		const cryptoKey = privateKey instanceof ArrayBuffer || ArrayBuffer.isView(privateKey) ? await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
 			{
@@ -119,7 +119,7 @@ export class RSASSAPSS {
 			},
 			false,
 			["sign"]
-		);
+		) : privateKey;
 		const signature = await crypto.subtle.sign(
 			{
 				name: "RSA-PSS",

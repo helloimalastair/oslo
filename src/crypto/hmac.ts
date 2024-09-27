@@ -26,10 +26,10 @@ export class HMAC {
 	}
 
 	public async sign(
-		key: ArrayBuffer | TypedArray,
+		key: ArrayBuffer | TypedArray | CryptoKey,
 		data: ArrayBuffer | TypedArray
 	): Promise<ArrayBuffer> {
-		const cryptoKey = await crypto.subtle.importKey(
+		const cryptoKey = key instanceof ArrayBuffer || ArrayBuffer.isView(key) ? await crypto.subtle.importKey(
 			"raw",
 			key,
 			{
@@ -38,7 +38,7 @@ export class HMAC {
 			},
 			false,
 			["sign"]
-		);
+		) : key;
 		const signature = await crypto.subtle.sign("HMAC", cryptoKey, data);
 		return signature;
 	}
